@@ -33,7 +33,7 @@ public class Mediator extends Agent {
 	
 	protected void setup() {
 		
-		System.out.println("Sou o mediador!");
+		System.out.println("I'm the mediator!");
 	
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
@@ -80,7 +80,7 @@ public class Mediator extends Agent {
 						myAgent.send(replyT);
 						System.out.println(myAgent.getLocalName()+" SENT THANKS MESSAGE"); 
 						
-						if(msg.getSender().getName() == p1AgentName) {
+						if(msg.getSender().getLocalName().equals(p1AgentName)) {
 							inpA = Integer.parseInt(msg.getContent().split(" ")[1]);
 						}else {
 							inpB = Integer.parseInt(msg.getContent().split(" ")[1]);
@@ -88,36 +88,14 @@ public class Mediator extends Agent {
 						
 						answersCnt++;
 						if (answersCnt == 2) {
+							ACLMessage replyW = new ACLMessage(ACLMessage.INFORM);
 							
-							ACLMessage replyW = msg.createReply();
-							replyW.setContent((((inpA + inpB) % 2 == 0)? ODD + " " + p1AgentName: EVEN + " " + p2AgentName)+ " WINNER!");
+							replyW.setContent((((inpA + inpB) % 2 != 0)? ODD + " " + p1AgentName: EVEN + " " + p2AgentName)+ " WINNER!");
 							replyW.addReceiver(new AID(p1AgentName, AID.ISLOCALNAME));
+							replyW.addReceiver(new AID(p2AgentName, AID.ISLOCALNAME));
 							myAgent.send(replyW);
+
 							System.out.println(myAgent.getLocalName()+" SENT WINNER MESSAGE"); 
-							// System.out.println(myAgent.getLocalName()+" " + replyW.getContent()); 
-							
-							// All answers have been received. 
-							// Wait a bit to be sure the other Thanks agents gets the Thank message,
-							// then kill everybody
-							// try {
-							// 	Thread.sleep(1000);
-							// } 
-							// catch (InterruptedException ie) {}
-							// try {
-								// Kill Agents
-							//	p1.kill();
-							//	p2.kill();
-								
-								// Notify the initiator if any
-							//	if (initiator != null) {
-							//		ACLMessage notification = new ACLMessage(ACLMessage.INFORM);
-							//		notification.addReceiver(initiator);
-							//		send(notification);
-							//	}	
-							// } 
-							// catch (StaleProxyException any) {
-							//	any.printStackTrace();
-							// }
 						}
 					} else if (START.equalsIgnoreCase(msg.getContent())) {
 						// send them a message requesting for a number;
