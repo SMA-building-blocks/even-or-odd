@@ -18,7 +18,7 @@ public class Player extends Agent {
 	public final static String THANKS = "THANKS";
 	
 	protected void setup() {	
-		System.out.println("Sou o jogador "+ this.getLocalName() +"!");
+		System.out.println("I'm player: "+ this.getLocalName() +"!");
 		
 		try {
 			DFAgentDescription dfd = new DFAgentDescription();
